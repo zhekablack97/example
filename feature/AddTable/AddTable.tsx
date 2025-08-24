@@ -123,7 +123,7 @@ export const AddTable = () => {
                 className="flex flex-col gap-4 relative "
               >
                 <div className="relative mb-4">
-                  <span className="text-lg font-bold">Создание таблицы</span>
+                  <span className="text-lg font-bold">Create Table</span>
                   {fields.length > 0 && (
                     <Button
                       variant="ghost"
@@ -133,13 +133,11 @@ export const AddTable = () => {
                       }}
                       className=" cursor-pointer absolute top-0 right-0"
                     >
-                      Очистить поля <RefreshCcw />
+                      Clear Fields <RefreshCcw />
                     </Button>
                   )}
                 </div>
-                <span className="text-sm text-muted-foreground">
-                  Заголовки:
-                </span>
+                <span className="text-sm text-muted-foreground">Headers:</span>
                 <div className="flex flex-col gap-4 ">
                   {fields.map((field, index) => (
                     <div key={field.id} className="flex gap-2 items-center">
@@ -149,10 +147,7 @@ export const AddTable = () => {
                         render={({ field }) => (
                           <FormItem className="flex-1">
                             <FormControl>
-                              <Input
-                                placeholder="Введите заголовок"
-                                {...field}
-                              />
+                              <Input placeholder="Enter header" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -176,10 +171,10 @@ export const AddTable = () => {
                   name="addField"
                   render={({ field }) => (
                     <FormItem className="flex   gap-2">
-                      <FormLabel>Введите заголовок для новой колонки</FormLabel>
+                      <FormLabel>Enter header for new column</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Введите заголовок для добавления"
+                          placeholder="Enter header to add"
                           {...field}
                           onFocus={(e) => {
                             setIsDisabled(false);
@@ -223,7 +218,7 @@ export const AddTable = () => {
                       type="submit"
                       disabled={fields.length === 0 || isDisabled}
                     >
-                      Создать таблицу
+                      Create Table
                     </Button>
                   </div>
                 )}

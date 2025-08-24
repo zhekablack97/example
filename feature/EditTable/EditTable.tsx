@@ -29,7 +29,7 @@ export const EditTable = ({ id }: { id: string }) => {
           dispatch(copyTable(id));
         }}
       >
-        Копировать
+        Copy
         <Copy />
       </Button>
       <Table className="w-full mb-2">
@@ -45,7 +45,7 @@ export const EditTable = ({ id }: { id: string }) => {
           {table?.rows.map((row) => (
             <TableRow key={row.id}>
               {row.cells.map((cell) => (
-                <TableCell key={cell.id}>
+                <TableCell key={cell.id} className="p-0">
                   <EditCell
                     value={cell.value}
                     idTable={id}

@@ -32,9 +32,9 @@ export const AddColl = ({ id }: { id: string }) => {
       <PopoverContent
         className="p-4 w-full max-w-2xl"
         sideOffset={20}
-        align="start"
+        align="end"
       >
-        <div>
+        <div className="flex gap-2 flex-col">
           <Input
             placeholder="Введите заголовок"
             value={header}
@@ -47,16 +47,17 @@ export const AddColl = ({ id }: { id: string }) => {
               }
             }}
           />
+
+          <Button
+            onClick={() => {
+              dispatch(addColl({ tableId: id, header }));
+              setOpen(false);
+              setHeader("");
+            }}
+          >
+            Add Coll
+          </Button>
         </div>
-        <Button
-          onClick={() => {
-            dispatch(addColl({ tableId: id, header }));
-            setOpen(false);
-            setHeader("");
-          }}
-        >
-          Add Coll
-        </Button>
       </PopoverContent>
     </Popover>
   );

@@ -35,7 +35,13 @@ export const tableSlice = createSlice({
     copyTable: (state, action: PayloadAction<string>) => {
       const table = state.tables.find((table) => table.id === action.payload);
       if (table) {
-        state.tables.push(table);
+        const currentIndex = state.tables.findIndex(
+          (table) => table.id === action.payload
+        );
+        const copiedTable = { ...table, id: nanoid() };
+
+        // Вставляем скопированную таблицу сразу после текущей
+        state.tables.splice(currentIndex + 1, 0, copiedTable);
       }
     },
     addRow: (state, action: PayloadAction<{ tableId: string }>) => {

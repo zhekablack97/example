@@ -9,7 +9,10 @@ export const Tables = () => {
     <div className="flex flex-wrap">
       {tables.map((table) => {
         return (
-          <div className="max-w-full flex-1 min-w-1/3 p-4" key={table.id}>
+          <div
+            className="max-w-full flex-1 min-w-1/3 pt-4 px-4 pb-6"
+            key={table.id}
+          >
             <EditTable id={table.id} />
           </div>
         );
