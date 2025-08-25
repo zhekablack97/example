@@ -103,11 +103,37 @@ export const tableSlice = createSlice({
         }
       }
     },
+    editHeader: (
+      state,
+      action: PayloadAction<{
+        tableId: string;
+        headerIndex: number;
+        newHeader: string;
+      }>
+    ) => {
+      const { tableId, headerIndex, newHeader } = action.payload;
+      const table = state.tables.find((table) => table.id === tableId);
+      if (table) {
+        table.nameColumns[headerIndex] = newHeader;
+      }
+    },
+    deleteTable: (state, action: PayloadAction<string>) => {
+      state.tables = state.tables.filter(
+        (table) => table.id !== action.payload
+      );
+    },
   },
 });
 
-export const { addTable, copyTable, addRow, addColl, editCell } =
-  tableSlice.actions;
+export const {
+  addTable,
+  copyTable,
+  addRow,
+  addColl,
+  editCell,
+  editHeader,
+  deleteTable,
+} = tableSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectTables = (state: RootState) => state.table;

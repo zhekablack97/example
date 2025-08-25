@@ -7,20 +7,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/form";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 import React, { useEffect, useState } from "react";
-import { Plus, RefreshCcw, Trash2 } from "lucide-react";
+import { RefreshCcw } from "lucide-react";
+import { HeaderField } from "./HeaderField";
+import { AddHeaderField } from "./AddHeaderField";
 import { Separator } from "@/components/ui/separator";
 import { nanoid } from "@reduxjs/toolkit";
 import { useAppDispatch } from "@/shared/hooks/useAppDispatch";
@@ -35,12 +28,10 @@ export const AddTable = () => {
   const [open, setOpen] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const [isClient, setIsClient] = useState(false);
-
+  const dispatch = useAppDispatch();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
-
-  const dispatch = useAppDispatch();
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -48,17 +39,6 @@ export const AddTable = () => {
   });
 
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (data) => {
-    console.log({
-      id: `table-${nanoid()}`,
-      nameColumns: data.headers,
-      rows: Array.from({ length: 5 }, () => ({
-        id: `row-${nanoid()}`,
-        cells: data.headers.map(() => ({
-          id: `cell-${nanoid()}`,
-          value: "",
-        })),
-      })),
-    });
     dispatch(
       addTable({
         id: `table-${nanoid()}`,
@@ -79,25 +59,10 @@ export const AddTable = () => {
     });
   };
 
-  // Функции для дополнительного инпута
   const handleAddFieldChange = (value: string) => {
-    // Если поле не пустое, добавляем новое поле и очищаем инпут
     if (value.trim() !== "") {
       append(value.trim());
-      // Очищаем значение в дополнительном инпуте
       form.setValue("addField", "");
-    }
-  };
-
-  const handleAddFieldBlur = (value: string) => {
-    handleAddFieldChange(value);
-  };
-
-  const handleAddFieldKeyDown = (value: string, e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      handleAddFieldChange(value);
-      setIsDisabled(false);
     }
   };
 
@@ -140,76 +105,24 @@ export const AddTable = () => {
                 <span className="text-sm text-muted-foreground">Headers:</span>
                 <div className="flex flex-col gap-4 ">
                   {fields.map((field, index) => (
-                    <div key={field.id} className="flex gap-2 items-center">
-                      <FormField
-                        control={form.control}
-                        name={`headers.${index}`}
-                        render={({ field }) => (
-                          <FormItem className="flex-1">
-                            <FormControl>
-                              <Input placeholder="Enter header" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <Button
-                        variant="ghost"
-                        type="button"
-                        onClick={() => remove(index)}
-                        className="w-8 h-8 cursor-pointer"
-                      >
-                        <Trash2 />
-                      </Button>
-                    </div>
+                    <HeaderField
+                      key={field.id}
+                      control={form.control}
+                      name={`headers.${index}`}
+                      fieldId={field.id}
+                      onRemove={() => remove(index)}
+                      placeholder="Enter header"
+                    />
                   ))}
                 </div>
                 {fields.length > 0 && <Separator className="my-4" />}
-                <FormField
+                <AddHeaderField
                   control={form.control}
+                  handleAddFieldChange={handleAddFieldChange}
                   name="addField"
-                  render={({ field }) => (
-                    <FormItem className="flex   gap-2">
-                      <FormLabel>Enter header for new column</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Enter header to add"
-                          {...field}
-                          onFocus={(e) => {
-                            setIsDisabled(false);
-                          }}
-                          onChange={(e) => {
-                            field.onChange(e);
-                            setIsDisabled(true);
-                          }}
-                          onBlur={(e) => {
-                            field.onBlur();
-                            handleAddFieldBlur(
-                              (e.target as HTMLInputElement).value
-                            );
-                            setIsDisabled(false);
-                          }}
-                          onKeyDown={(e) =>
-                            handleAddFieldKeyDown(
-                              (e.target as HTMLInputElement).value,
-                              e
-                            )
-                          }
-                        />
-                      </FormControl>
-                      <FormMessage />
-                      <Button
-                        variant="ghost"
-                        type="button"
-                        onClick={() => {
-                          setIsDisabled(false);
-                        }}
-                      >
-                        <Plus />
-                      </Button>
-                    </FormItem>
-                  )}
+                  setIsDisabled={setIsDisabled}
+                  placeholder="Enter header to add"
+                  label="Enter header for new column"
                 />
 
                 {fields.length > 0 && (

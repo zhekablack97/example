@@ -1,1 +1,1 @@
-export * from "./EditTable";
+export * from "./ui/EditTable";

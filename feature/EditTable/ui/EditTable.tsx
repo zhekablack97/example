@@ -9,35 +9,31 @@ import {
 } from "@/components/ui/table";
 import { useAppDispatch } from "@/shared/hooks/useAppDispatch";
 import { useAppSelector } from "@/shared/hooks/useAppSelector";
-import { addRow, copyTable } from "@/shared/store/slice/table/tableSlice";
-import { Copy, Plus } from "lucide-react";
-import { AddColl } from "../AddColl";
-import { EditCell } from "../EditCell";
+import { AddColl } from "../../AddColl";
+import { EditHeaderField } from "./EditHeaderField";
+import { EditCell } from "./EditCell";
+import { AddRow } from "@/feature/AddRow";
+import { CopyTable } from "@/feature/CopyTable";
+import { DeleteTable } from "@/feature/DeleteTable";
 
 export const EditTable = ({ id }: { id: string }) => {
   const table = useAppSelector((state) =>
     state.table.tables.find((table) => table.id === id)
   );
-  const dispatch = useAppDispatch();
 
   return (
     <div className="w-full relative pr-12 wrapperTable">
-      <Button
-        variant="outline"
-        className="absolute -top-10 right-12 z-10"
-        onClick={() => {
-          dispatch(copyTable(id));
-        }}
-      >
-        Copy
-        <Copy />
-      </Button>
+      <CopyTable id={id} />
+      <DeleteTable id={id} />
       <Table className="w-full mb-2">
-        {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
         <TableHeader>
           <TableRow>
-            {table?.nameColumns.map((column) => (
-              <TableHead key={column}>{column}</TableHead>
+            {table?.nameColumns.map((column, index) => (
+              <>
+                <TableHead key={column} className="p-0">
+                  <EditHeaderField idTable={id} index={index} value={column} />
+                </TableHead>
+              </>
             ))}
           </TableRow>
         </TableHeader>
@@ -59,15 +55,7 @@ export const EditTable = ({ id }: { id: string }) => {
         </TableBody>
       </Table>
       <AddColl id={id} />
-      <Button
-        variant="outline"
-        className=" plusRow w-full  z-10 cursor-pointer flex items-center justify-center"
-        onClick={() => {
-          dispatch(addRow({ tableId: id }));
-        }}
-      >
-        <Plus />
-      </Button>
+      <AddRow id={id} />
     </div>
   );
 };

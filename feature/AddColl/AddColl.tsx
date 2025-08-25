@@ -19,6 +19,20 @@ export const AddColl = ({ id }: { id: string }) => {
     setHeader(e.target.value);
   };
 
+  const addColumn = () => {
+    if (header.trim()) {
+      dispatch(addColl({ tableId: id, header }));
+      setOpen(false);
+      setHeader("");
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      addColumn();
+    }
+  };
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -36,27 +50,13 @@ export const AddColl = ({ id }: { id: string }) => {
       >
         <div className="flex gap-2 flex-col">
           <Input
-            placeholder="Введите заголовок"
+            placeholder="Enter header"
             value={header}
             onChange={handleChange}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && header.trim()) {
-                dispatch(addColl({ tableId: id, header }));
-                setOpen(false);
-                setHeader("");
-              }
-            }}
+            onKeyDown={handleKeyDown}
           />
 
-          <Button
-            onClick={() => {
-              dispatch(addColl({ tableId: id, header }));
-              setOpen(false);
-              setHeader("");
-            }}
-          >
-            Add Coll
-          </Button>
+          <Button onClick={addColumn}>Add Column</Button>
         </div>
       </PopoverContent>
     </Popover>
