@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { useAppDispatch } from "@/shared/hooks/useAppDispatch";
 import { deleteTable } from "@/shared/store/slice/table/tableSlice";
-import { Trash, X } from "lucide-react";
+import { Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export const DeleteTable = ({ id }: { id: string }) => {

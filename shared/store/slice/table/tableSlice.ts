@@ -14,19 +14,16 @@ interface Table {
   nameColumns: string[];
 }
 
-// Define a type for the slice state
 interface TableState {
   tables: Table[];
 }
 
-// Define the initial state using that type
 const initialState: TableState = {
   tables: [],
 };
 
 export const tableSlice = createSlice({
   name: "table",
-  // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
     addTable: (state, action: PayloadAction<Table>) => {
@@ -40,7 +37,6 @@ export const tableSlice = createSlice({
         );
         const copiedTable = { ...table, id: nanoid() };
 
-        // Вставляем скопированную таблицу сразу после текущей
         state.tables.splice(currentIndex + 1, 0, copiedTable);
       }
     },
@@ -49,7 +45,6 @@ export const tableSlice = createSlice({
       const table = state.tables.find((table) => table.id === tableId);
 
       if (table) {
-        // Используем количество колонок для создания правильного количества ячеек
         const countCells = table.nameColumns.length;
 
         table.rows.push({
@@ -69,10 +64,8 @@ export const tableSlice = createSlice({
       const table = state.tables.find((table) => table.id === tableId);
 
       if (table) {
-        // Добавляем новый заголовок колонки
         table.nameColumns.push(header);
 
-        // Добавляем новую ячейку для каждой существующей строки
         table.rows.forEach((row) => {
           row.cells.push({
             id: nanoid(),
